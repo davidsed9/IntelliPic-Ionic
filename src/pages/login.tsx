@@ -8,7 +8,7 @@ import classNames from "classnames";
 import styles from "./Home.module.css";
 import Header from "../components/Header";
 
-const APP_ROOT = "http://localhost:3000/";
+const APP_ROOT = "http://localhost:3000/"; // Change this depending on where you want to be redirected after the email
 
 export default function Login() {
   const [email, setEmail] = useState("");
