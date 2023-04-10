@@ -66,6 +66,7 @@ export default function Home() {
   const [uploading, setUploading] = useState(false);
   const [queueingFinetuning, setQueueingFinetuning] = useState(false);
   const [instanceName, setInstanceName] = useState("");
+  const [instanceType, setInstanceType] = useState("Man");
 
   useEffect(() => {
     if (!user) {
@@ -161,6 +162,7 @@ export default function Home() {
       {
         url: fineTuningData.dataset,
         prompt: instanceName,
+        instance_type: instanceType,
         user_id: user?.id,
       },
       (data: any) => console.log(data)
@@ -253,7 +255,7 @@ export default function Home() {
             >
               <div>
                 <div className={styles.stepheading}>Fine tune the model</div>
-                <div>Start fine tuning your model to the selected data.<br />Give the object you are fine-tuning for an unique name (e.g. Olliedog).</div>
+                <div>Start fine tuning your model to the selected data.<br />Give the object you are fine-tuning for an unique name (e.g. Olliedog) and the object type.</div>
                 <div
                   className={classNames(styles.finetuningsection, {
                     [styles.hidden]: hasFinetunedModel || !hasUploadedData,
@@ -265,6 +267,13 @@ export default function Home() {
                     onChange={(ev) => setInstanceName(ev.target.value)}
                     placeholder={"Unique instance name"}
                   />
+                  <select name="instance_type" id="ip" className={styles.instance} onChange={(ev) => setInstanceType(ev.target.value)}>
+                    <option value="Man">Man</option>
+                    <option value="Woman">Woman</option>
+                    <option value="Dog">Dog</option>
+                    <option value="Cat">Cat</option>
+                    <option value="Thing">Thing</option>
+                  </select>
                   <button
                     disabled={
                       instanceName.length === 0 ||

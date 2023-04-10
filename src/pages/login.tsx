@@ -8,7 +8,7 @@ import classNames from "classnames";
 import styles from "./Home.module.css";
 import Header from "../components/Header";
 
-const APP_ROOT = "https://intelli-pic.vercel.app/";
+const APP_ROOT = "http://localhost:3000/";
 
 export default function Login() {
   const [email, setEmail] = useState("");
