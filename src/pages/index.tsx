@@ -66,6 +66,7 @@ export default function Home() {
   const [uploading, setUploading] = useState(false);
   const [queueingFinetuning, setQueueingFinetuning] = useState(false);
   const [instanceName, setInstanceName] = useState("");
+  // Instance Type that defaults to "Man"
   const [instanceType, setInstanceType] = useState("Man");
 
   useEffect(() => {
@@ -155,6 +156,7 @@ export default function Home() {
     });
   }
 
+  // Include instanceType on the object sent to Blueprint with the name instance_type
   async function handleValidationAndFinetuningStart() {
     setQueueingFinetuning(true);
     await post(
@@ -267,6 +269,7 @@ export default function Home() {
                     onChange={(ev) => setInstanceName(ev.target.value)}
                     placeholder={"Unique instance name"}
                   />
+                  {/* New select for the instance type */}
                   <select name="instance_type" id="ip" className={styles.instance} onChange={(ev) => setInstanceType(ev.target.value)}>
                     <option value="Man">Man</option>
                     <option value="Woman">Woman</option>
