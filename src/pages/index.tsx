@@ -271,11 +271,11 @@ export default function Home() {
                   />
                   {/* New select for the instance type */}
                   <select name="instance_type" id="ip" className={styles.instance} onChange={(ev) => setInstanceType(ev.target.value)}>
-                    <option value="Man">Man</option>
-                    <option value="Woman">Woman</option>
-                    <option value="Dog">Dog</option>
-                    <option value="Cat">Cat</option>
-                    <option value="Thing">Thing</option>
+                    <option value="man">Man</option>
+                    <option value="woman">Woman</option>
+                    <option value="dog">Dog</option>
+                    <option value="cat">Cat</option>
+                    <option value="thing">Thing</option>
                   </select>
                   <button
                     disabled={
