@@ -209,9 +209,9 @@ export default function Home() {
               })}
             >
               <div>
-                <div className={styles.stepheading}>Upload data</div>
+                <div className={styles.stepheading}>Subir Imágenes</div>
                 <div>
-                  Select some images to start fine tuning Stable Diffusion.
+                    Selecciona algunas imágenes para entrenar a la IA con un modelo
                 </div>
 
                 {!hasUploadedData && (
@@ -238,7 +238,7 @@ export default function Home() {
                         }
                         disabled={uploading}
                       >
-                        Upload data
+                        Subir Imágenes
                       </button>
                     </label>
                   </>
@@ -256,8 +256,8 @@ export default function Home() {
               style={{ marginBottom: 0 }}
             >
               <div>
-                <div className={styles.stepheading}>Fine tune the model</div>
-                <div>Start fine tuning your model to the selected data.<br />Give the object you are fine-tuning for an unique name (e.g. Olliedog) and the object type.</div>
+                <div className={styles.stepheading}>Ajustar el modelo</div>
+                <div>Para comenzar a entrenar la IA.<br />Dale un nombre único a tu modelo (Por ejemplo Davidrmk)</div>
                 <div
                   className={classNames(styles.finetuningsection, {
                     [styles.hidden]: hasFinetunedModel || !hasUploadedData,
@@ -271,11 +271,11 @@ export default function Home() {
                   />
                   {/* New select for the instance type */}
                   <select name="instance_type" id="ip" className={styles.instance} onChange={(ev) => setInstanceType(ev.target.value)}>
-                    <option value="man">Man</option>
-                    <option value="woman">Woman</option>
-                    <option value="dog">Dog</option>
-                    <option value="cat">Cat</option>
-                    <option value="thing">Thing</option>
+                    <option value="man">Hombre</option>
+                    <option value="woman">Mujer</option>
+                    <option value="dog">Perro</option>
+                    <option value="cat">Gato</option>
+                    <option value="thing">Cosa</option>
                   </select>
                   <button
                     disabled={
@@ -310,14 +310,14 @@ export default function Home() {
                     className={classNames(styles.input, styles.promptinput)}
                     value={instancePrompt}
                     onChange={(e) => setInstancePrompt(e.target.value)}
-                    placeholder="Image generation prompt, e.g. Olliedog in warhol style"
+                    placeholder="' Retrato de primer plano de Davidrmk como un vikingo'"
                   />
                   <button
                     onClick={handleCallModel}
                     className={classNames(styles.button, styles.primary)}
                     style={{ marginTop: 0 }}
                   >
-                    Image me!
+                    Generar
                   </button>
                 </div>
                 {imageUrl && (
@@ -340,7 +340,7 @@ export default function Home() {
                 onClick={() => clearUserData(user)}
                 className={classNames(styles.button, styles.reset)}
               >
-                Start again
+                Empezar de nuevo
               </button>
             </div>
           </main>

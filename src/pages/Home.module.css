@@ -24,16 +24,19 @@
 }
 
 .button {
+  background-color: white;
   padding: 4px 8px;
   height: 30px;
   border-radius: 6px;
   border: 1px solid transparent;
   transition: 0.5s;
   background-size: 200% auto;
-  width: 100px;
+  width: 150px;
   margin-top: 16px;
   pointer-events: inherit;
   cursor: pointer;
+  font-weight: bold;
+  color: black;
 }
 
 .finetuningsection {
@@ -116,7 +119,7 @@
   padding: 6px 8px;
   border-radius: 6px;
   border: 1px solid #eee;
-  width: 300px;
+  width: 370px;
   margin-top: 8px;
   font-size: 14px;
   margin-right: 8px;
@@ -132,7 +135,7 @@
 }
 
 .primary {
-  background-image: linear-gradient(to right, #fbc2eb 0%, #a6c1ee 51%, #fbc2eb 100%);
+  background-image: linear-gradient(to right, #05fa9c 0%, #05fa9c 51%, #05fa9c 100%);
 }
 
 .primary:hover {

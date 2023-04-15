@@ -18,13 +18,13 @@ export default function Header({ showHeader = true }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.header}>
-        <div>Avatar me!</div>
+        <div>Intelli Pic</div>
         {showHeader && <button
           style={{ marginTop: 0 }}
           className={styles.button}
           onClick={() => supabaseClient.auth.signOut()}
         >
-          Logout
+          Cerrar Sesión
         </button>}
       </div>
     </>

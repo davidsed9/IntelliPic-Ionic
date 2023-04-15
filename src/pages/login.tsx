@@ -8,7 +8,8 @@ import classNames from "classnames";
 import styles from "./Home.module.css";
 import Header from "../components/Header";
 
-const APP_ROOT = "https://intelli-pic.vercel.app/"; // Change this depending on where you want to be redirected after the email
+// const APP_ROOT = "https://intelli-pic.vercel.app/"; // Change this depending on where you want to be redirected after the email
+const APP_ROOT = "http://localhost:3000/"; // Change this depending on where you want to be redirected after the email
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -30,7 +31,7 @@ export default function Login() {
     });
 
     setEmail("");
-    setLoginMessage("Email sent");
+    setLoginMessage("Correo enviado");
   }
 
   return (
@@ -41,7 +42,7 @@ export default function Login() {
           className={classNames(styles.input, styles.logininput)}
           value={email}
           onChange={(ev) => setEmail(ev.target.value)}
-          placeholder={"Enter email address to sign in or sign up"}
+          placeholder={"Ingrese la dirección de correo electrónico para iniciar sesión o registrarse"}
         />
         <button
           className={classNames(
@@ -53,7 +54,7 @@ export default function Login() {
           onClick={signInWithEmail}
           disabled={email.length === 0}
         >
-          Sign in / Sign up
+          Iniciar sesión / Registrarse
         </button>
         <div className={styles.loginmessage}>{loginMessage.length > 0 && loginMessage}</div>
       </main>

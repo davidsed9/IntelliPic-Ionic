@@ -87,13 +87,8 @@ body {
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color:  rgb(var(--foreground-rgb));
+  background: #e9e4e47e; /* Set the background color to white */
 }
 
 a {
