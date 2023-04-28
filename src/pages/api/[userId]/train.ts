@@ -1,6 +1,5 @@
 // This api route begins the training process
 // should work the same as fine_tune_model from previous main.py
-// TODO: Create the function itself
 
 // Route to call from the front-end: api/{$user.id}/train
 
@@ -48,8 +47,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const replicateModelId = responseReplicate.data.id as string;
 
-  // update user's data
-  //...
+  // update user's data in supabase
+  // ...
 
   // return response
   return res.json({ ... });
