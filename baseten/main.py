@@ -61,6 +61,7 @@ def model_status(request):
 @route(path="/fine_tune_model", allowed_domains=["http://localhost:3000","https://intelli-pic.vercel.app"], allowed_methods=["POST"], is_public=True)
 def fine_tune_model(request):
     login_user()
+    # get request data and instatiate useful data
     request_body = request["body"]
     url = request_body.get("url")
     user_id = request_body.get("user_id")
@@ -71,6 +72,7 @@ def fine_tune_model(request):
     class_prompt = request_body.get("instance_type") # Type of the object
     class_prompt = "a photo of a " + class_prompt
     dataset = PublicUrl(f'{SUPABASE_OBJECT_URL}{url}')
+    # initiate training
     # DreamboothConfig Reference: https://docs.blueprint.baseten.co/reference/python/DreamboothConfig/
     config = DreamboothConfig(
         instance_prompt=instance_prompt,
@@ -86,7 +88,10 @@ def fine_tune_model(request):
         auto_deploy=True
     )
     run_data ={ "run_id": run.id }
+    # update user's data
     update_user_data(user_id, run_data)
+
+    # return response
     return run_data
 
 
