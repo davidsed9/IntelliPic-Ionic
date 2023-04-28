@@ -98,12 +98,16 @@ def fine_tune_model(request):
 @route(path="/call_model", is_public=True, allowed_domains=["http://localhost:3000","https://intelli-pic.vercel.app"],allowed_methods=["POST"])
 def call_model(request):
     login_user()
+    # get request data
     request_body = request["body"]
     instance_prompt = request_body.get("instance_prompt")
     run_id = request_body.get("run_id")
     run = FinetuningRun(run_id)
+    # call model
     model = StableDiffusionPipeline(model_id=run.deployed_model._model_id)
+    # generate response
     image, url = model(instance_prompt)
+    # return response
     return {
         "url": url
     }
