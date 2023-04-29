@@ -18,8 +18,18 @@ import replicateClient from "@/core/clients/replicate";
 
 // TODO: translate fine_tune_model to work with replicate (show follow similar steps)
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  
+  const SUPABASE_PREFIX_URL = "https://jwbyizeytvnlasmwdkro.supabase.co/"
+  const SUPABASE_TABLE_NAME = "finetuningruns"
+  const SUPABASE_BUCKET_NAME = "fine-tuning-bucket"
+  const SUPABASE_OBJECT_URL = `${SUPABASE_PREFIX_URL}storage/v1/object/public/${SUPABASE_BUCKET_NAME}/`
+  
   // get request data and instatiate useful data
-  // ...
+  const instanceClass = req.body.instance_type as string;
+  const url = req.body.url as string;
+  const id = req.query.userId as string;
+  const instanceToken = req.body.prompt as string;
+  const instanceData = SUPABASE_OBJECT_URL + url;
 
   // initiate training
   // TODO: add REPLICATE_USERNAME to .env.local file
@@ -27,15 +37,15 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     "/v1/trainings",
     {
       input: {
-        instance_prompt: `a photo of a ${process.env.NEXT_PUBLIC_REPLICATE_INSTANCE_TOKEN} ${instanceClass}`,
+        instance_prompt: `a photo of a ${instanceToken} ${instanceClass}`,
         class_prompt: `a photo of a ${instanceClass}`,
-        instance_data: `https://${process.env.S3_UPLOAD_BUCKET}.s3.amazonaws.com/${project.id}.zip`,
-        max_train_steps: Number(process.env.REPLICATE_MAX_TRAIN_STEPS),
-        num_class_images: 200,
-        learning_rate: 1e-6,
+        instance_data: instanceData,
+        max_train_steps: 1300,
+        num_class_images: 100,
+        learning_rate: 2e-6,
       },
-      model: `${process.env.REPLICATE_USERNAME}/${project.id}`,
-      webhook_completed: `${process.env.NEXTAUTH_URL}/api/webhooks/completed`,
+      model: `${process.env.REPLICATE_USERNAME}/${id}`,
+      trainer_version: "d5e058608f43886b9620a8fbb1501853b8cbae4f45c857a014011c86ee614ffb",
     },
     {
       headers: {
@@ -51,7 +61,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   // ...
 
   // return response
-  return res.json({ ... });
+  return res.json({responseReplicate});
 };
 
 export default handler;

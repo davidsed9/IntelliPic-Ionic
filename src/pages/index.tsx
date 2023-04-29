@@ -11,7 +11,7 @@ import styles from "./Home.module.css";
 import Header from "../components/Header";
 import classNames from "classnames";
 
-const BASETEN_PROJECT_ROUTE = "https://app.baseten.co/routes/XP9Z8Wq"
+const BASETEN_PROJECT_ROUTE = "https://app.baseten.co/routes/V0NdMvq"
 const FINETUNING_BUCKET = "fine-tuning-bucket"; // Update to the bucket name you chose on Supabase Storage
 
 async function post(url: string, body: any, callback: any) {
@@ -120,52 +120,50 @@ export default function Home() {
   }
 
   async function handleFileUpload(ev: React.ChangeEvent<HTMLInputElement>) {
-    setUploading(true);
-    const zip = new JSZip();
-    const files = ev.target.files || [];
-    const folder = zip.folder("dataset")?.folder("object");
-    if (folder) {
+  setUploading(true);
+  const files = ev.target.files || [];
+  const zip = new JSZip();
+  const dataFolder = zip.folder("data");
+
+  if (dataFolder) {
+    if (dataFolder) {
       for (let file = 0; file < files.length; file++) {
-        folder.file(files[file].name, files[file]);
+        dataFolder.file(files[file].name, files[file]);
       }
     }
-
-    zip.generateAsync({ type: "blob" }).then(async (content) => {
-      try {
-        await supabase.storage
-          .from(FINETUNING_BUCKET)
-          .remove([`public/${user?.id}`]);
-      } catch (error) {
-        console.log(error);
-      }
-
-      const { data } = await supabase.storage
-        .from(FINETUNING_BUCKET)
-        .upload(`public/${user?.id}`, content);
-
-      if (data) {
-        await supabase
-          .from("finetuningruns")
-          .update({ dataset: `public/${user?.id}` })
-          .eq("user_id", user?.id)
-          .select();
-        getOrInsertUserData(user);
-      }
-
-      setUploading(false);
-    });
   }
+
+  zip.generateAsync({ type: "blob" }).then(async (content) => {
+    try {
+      await supabase.storage.from(FINETUNING_BUCKET).remove([`public/${user?.id}`]);
+    } catch (error) {
+      console.log(error);
+    }
+
+    const { data } = await supabase.storage.from(FINETUNING_BUCKET).upload(`public/${user?.id}/data.zip`, content);
+
+    if (data) {
+      await supabase
+        .from("finetuningruns")
+        .update({ dataset: `public/${user?.id}/data.zip` })
+        .eq("user_id", user?.id)
+        .select();
+      getOrInsertUserData(user);
+    }
+
+    setUploading(false);
+  });
+}
 
   // Include instanceType on the object sent to Blueprint with the name instance_type
   async function handleValidationAndFinetuningStart() {
     setQueueingFinetuning(true);
     await post(
-      `${BASETEN_PROJECT_ROUTE}/fine_tune_model`,
+      `api/${user?.id}/train`,
       {
         url: fineTuningData.dataset,
         prompt: instanceName,
         instance_type: instanceType,
-        user_id: user?.id,
       },
       (data: any) => console.log(data)
     );
