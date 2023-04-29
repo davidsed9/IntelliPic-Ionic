@@ -15,6 +15,7 @@
 
 import { NextApiRequest, NextApiResponse } from "next";
 import replicateClient from "@/core/clients/replicate";
+import { supabase } from "@/supabaseClient";
 
 // TODO: translate fine_tune_model to work with replicate (show follow similar steps)
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -58,7 +59,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const replicateModelId = responseReplicate.data.id as string;
 
   // update user's data in supabase
-  // ...
+  const { error } = await supabase
+    .from(SUPABASE_TABLE_NAME)
+    .update({run_id: replicateModelId})
+    .eq("user_id", id)
 
   // return response
   return res.json({responseReplicate});

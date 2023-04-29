@@ -47,6 +47,7 @@ function useInterval(callback: () => void, delay: number | null) {
 }
 
 export default function Home() {
+  const SUPABASE_TABLE_NAME = "finetuningruns"
   const user = useUser();
   const [ready, setReady] = useState(false);
   const [fineTuningData, setFinetuningData] = useState({
@@ -106,7 +107,8 @@ export default function Home() {
 }
 
   async function getModelStatus(user: any) {
-    await fetch(`${BASETEN_PROJECT_ROUTE}/model_status?user_id=${user.id}`)
+    
+    await fetch(`api/${user?.id}/status`)
       .then((response) => response.json())
       .then((data) => {
         console.log(data)
