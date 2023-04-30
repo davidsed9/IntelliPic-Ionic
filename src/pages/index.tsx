@@ -92,16 +92,19 @@ export default function Home() {
 
   async function clearUserData(user: any) {
     post(
-      `${BASETEN_PROJECT_ROUTE}/clear_user_data`,
-      { user_id: user?.id },
+      `api/${user.id}`,
+      { },
       (data: any) => setFinetuningData(data.output)
     );
   }
 
   async function getOrInsertUserData(user: any) {
-  await fetch(`${BASETEN_PROJECT_ROUTE}/user_data?user_id=${user.id}`)
+  await fetch(`api/${user.id}`)
   .then((response) => response.json())
-  .then((data) => setFinetuningData(data.output));
+  .then((data) => {
+    console.log(data)
+    setFinetuningData(data)
+  });
 
   setReady(true);
 }
@@ -111,7 +114,6 @@ export default function Home() {
     await fetch(`api/${user?.id}/status`)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data)
         setModelStatus({
           modelId: data.model_id,
           healthy: data.healthy,

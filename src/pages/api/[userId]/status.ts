@@ -25,12 +25,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     .from(SUPABASE_TABLE_NAME)
     .select("*")
     .eq("user_id", userId)
-    .then((data) => {
+    .then(async (data) => {
       const runId = data.data?.[0].run_id;
       if (!(runId === null)){
-        console.log(runId);
-        console.log(data.data?.[0].run_id)
-        fetch(`https://dreambooth-api-experimental.replicate.com/v1/trainings/${data.data?.[0].run_id}`,{
+        await fetch(`https://dreambooth-api-experimental.replicate.com/v1/trainings/${runId}`,{
           headers: {
             Authorization: `Token ${process.env.REPLICATE_API_TOKEN}`,
             "Content-Type": "application/json",
@@ -38,7 +36,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         })
           .then((model) => model.json())
           .then((json) => {
-            console.log(json.status)
             return res.status(200).json({healthy: json.status === "succeeded" , model_id: runId})
         })
       } else {
