@@ -113,8 +113,8 @@ export default function Home() {
       .then((data) => {
         console.log(data)
         setModelStatus({
-          modelId: data.output.model_id,
-          healthy: data.output.healthy,
+          modelId: data.model_id,
+          healthy: data.healthy,
         })
       });
 
@@ -122,40 +122,41 @@ export default function Home() {
   }
 
   async function handleFileUpload(ev: React.ChangeEvent<HTMLInputElement>) {
-  setUploading(true);
-  const files = ev.target.files || [];
-  const zip = new JSZip();
-  const dataFolder = zip.folder("data");
+    setUploading(true);
+    const files = ev.target.files || [];
+    const zip = new JSZip();
+    const dataFolder = zip.folder("data");
 
-  if (dataFolder) {
     if (dataFolder) {
-      for (let file = 0; file < files.length; file++) {
-        dataFolder.file(files[file].name, files[file]);
+      if (dataFolder) {
+        for (let file = 0; file < files.length; file++) {
+          dataFolder.file(files[file].name, files[file]);
+        }
       }
     }
+
+    zip.generateAsync({ type: "blob" }).then(async (content) => {
+      try {
+        await supabase.storage
+          .from(FINETUNING_BUCKET)
+          .remove([`public/${user?.id}`]);
+      } catch (error) {
+        console.log(error);
+      }
+      const { data } = await supabase.storage
+        .from(FINETUNING_BUCKET)
+        .upload(`public/${user?.id}`, content);
+      if (data) {
+        await supabase
+          .from("finetuningruns")
+          .update({ dataset: `public/${user?.id}` })
+          .eq("user_id", user?.id)
+          .select();
+        getOrInsertUserData(user);
+      }
+      setUploading(false);
+    });
   }
-
-  zip.generateAsync({ type: "blob" }).then(async (content) => {
-    try {
-      await supabase.storage.from(FINETUNING_BUCKET).remove([`public/${user?.id}`]);
-    } catch (error) {
-      console.log(error);
-    }
-
-    const { data } = await supabase.storage.from(FINETUNING_BUCKET).upload(`public/${user?.id}/data.zip`, content);
-
-    if (data) {
-      await supabase
-        .from("finetuningruns")
-        .update({ dataset: `public/${user?.id}/data.zip` })
-        .eq("user_id", user?.id)
-        .select();
-      getOrInsertUserData(user);
-    }
-
-    setUploading(false);
-  });
-}
 
   // Include instanceType on the object sent to Blueprint with the name instance_type
   async function handleValidationAndFinetuningStart() {

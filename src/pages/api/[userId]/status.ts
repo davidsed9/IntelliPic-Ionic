@@ -14,7 +14,6 @@
 // }
 
 import { NextApiRequest, NextApiResponse } from "next";
-import replicateClient from "@/core/clients/replicate";
 import { supabase } from "@/supabaseClient";
 
 // TODO: Fix function pls
@@ -26,13 +25,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     .from(SUPABASE_TABLE_NAME)
     .select("*")
     .eq("user_id", userId)
-    .then(async (data) => {
-      if (!data.data?.[1] === null){
-        fetch(`https://dreambooth-api-experimental.replicate.com/v1/trainings/${data.data?.[1]}`)
+    .then((data) => {
+      const runId = data.data?.[0].run_id;
+      if (!(runId === null)){
+        console.log(runId);
+        console.log(data.data?.[0].run_id)
+        fetch(`https://dreambooth-api-experimental.replicate.com/v1/trainings/${data.data?.[0].run_id}`,{
+          headers: {
+            Authorization: `Token ${process.env.REPLICATE_API_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+        })
           .then((model) => model.json())
           .then((json) => {
-            console.log(json)
-            return res.status(200).json({healthy: json.output.status === "succeeded" , model_id: data.data?.[1]})
+            console.log(json.status)
+            return res.status(200).json({healthy: json.status === "succeeded" , model_id: runId})
         })
       } else {
         return res.status(200).json({healthy: false, model_id: null})

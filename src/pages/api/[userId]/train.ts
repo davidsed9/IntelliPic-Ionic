@@ -41,7 +41,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         instance_prompt: `a photo of a ${instanceToken} ${instanceClass}`,
         class_prompt: `a photo of a ${instanceClass}`,
         instance_data: instanceData,
-        max_train_steps: 1300,
+        max_train_steps: 1750,
         num_class_images: 100,
         learning_rate: 2e-6,
       },
