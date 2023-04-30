@@ -20,7 +20,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         supabase.from(SUPABASE_TABLE_NAME).insert({user_id: userId})
       }
       const userData = data.data?.[0];
-      console.log(userData)
       await fetch(`https://dreambooth-api-experimental.replicate.com/v1/trainings/${userData.run_id}`,{
           headers: {
             Authorization: `Token ${process.env.REPLICATE_API_TOKEN}`,
@@ -29,7 +28,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         })
           .then((model) => model.json())
           .then((values) => {
-            console.log(values)
             return res.status(200).json({dataset: userData.dataset, run_id: userData.run_id,run_data:{status: values.status}})
           })
     })

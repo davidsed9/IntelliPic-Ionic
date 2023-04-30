@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { useIsomorphicLayoutEffect } from "usehooks-ts";
+import { useIsomorphicLayoutEffect, useTimeout } from "usehooks-ts";
 
 import { supabase } from "../supabaseClient";
 import { useUser } from "@supabase/auth-helpers-react";
@@ -69,6 +69,26 @@ export default function Home() {
   const [instanceName, setInstanceName] = useState("");
   // Instance Type that defaults to "Man"
   const [instanceType, setInstanceType] = useState("Man");
+  const [predictionId, setPredictionId] = useState("");
+  const [predictionCompleted, setPredictionCompleted] = useState<null|boolean>(null);
+  
+  useEffect(()=>{
+    const sub = async() => {
+      await supabase
+        .from('predictions')
+        .select('*')
+        // .eq('user_id', wuser?.id)
+        // .order('created_at', {ascending: false})
+        // .limit(1)
+        .then((data) => {
+          console.log(data)
+          // const prediction = data.data?.[0].id;
+          // console.log(prediction)
+          // setPredictionId(prediction);
+        })
+    }
+    sub();
+  },[])
 
   useEffect(() => {
     if (!user) {
@@ -89,6 +109,8 @@ export default function Home() {
 
   useInterval(() => getOrInsertUserData(user), 10000);
   useInterval(() => getModelStatus(user), 10000);
+  useInterval(() => handleGetPrediction(), 10000)
+  
 
   async function clearUserData(user: any) {
     post(
@@ -177,19 +199,34 @@ export default function Home() {
   }
 
   async function handleCallModel() {
+    setPredictionCompleted(null);
     post(
-      `${BASETEN_PROJECT_ROUTE}/call_model`,
+      `api/${user?.id}/call-model`,
       {
         run_id: fineTuningData.run_id,
         instance_prompt: instancePrompt,
       },
       (data: any) => {
-        const {
-          output: { url },
-        } = data;
-        setImageUrl(url);
+        // console.log(data.prediction_id);
+        setPredictionId(data.prediction_id);
       }
     );
+  }
+
+  async function handleGetPrediction(){
+    post(
+      `api/${user?.id}/get-prediction`,
+      {
+        prediction_id: predictionId
+      },
+      (data: any) => {
+        console.log(data.status)
+        if(data.status==="succeeded"){
+          setImageUrl(data.output[0])
+        } else {
+        }
+      }
+    )
   }
 
   const hasUploadedData = !!fineTuningData?.dataset;

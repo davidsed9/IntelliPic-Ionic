@@ -44,9 +44,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         max_train_steps: 1750,
         num_class_images: 100,
         learning_rate: 2e-6,
+        with_prior_preservation: true,
+        train_text_encoder: true,
       },
       model: `${process.env.REPLICATE_USERNAME}/${id}`,
-      trainer_version: "d5e058608f43886b9620a8fbb1501853b8cbae4f45c857a014011c86ee614ffb",
+      trainer_version: "d5e058608f43886b9620a8fbb1501853b8cbae4f45c857a014011c86ee614ffb", // sd-2.1
     },
     {
       headers: {
