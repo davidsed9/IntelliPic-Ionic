@@ -18,11 +18,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         .then((model) => model.json())
         .then(async (value) => {
           // call model
-          console.log(value)
           return res.json(value);
         });
-  // return response
-  return res.json({ output: ""});
 };
 
 export default handler;
