@@ -212,9 +212,9 @@ export default function Home() {
       },
       (data: any) => {
         setPredictionId(data.prediction_id);
+        setQueueingPrediction(true);
       }
     );
-    setQueueingPrediction(true);
   }
 
   async function handleGetPrediction(){
