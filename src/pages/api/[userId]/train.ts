@@ -67,7 +67,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     .eq("user_id", id)
 
   // return response
-  return res.json({responseReplicate});
+  return res.json({run_id: replicateModelId});
 };
 
 export default handler;
