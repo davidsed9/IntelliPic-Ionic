@@ -166,7 +166,7 @@ export default function Home() {
       try {
         await supabase.storage
           .from(FINETUNING_BUCKET)
-          .remove([`public/${user?.id}`]);
+          .remove([`public/${user?.id}/data.zip`]);
       } catch (error) {
         console.log(error);
       }
@@ -176,7 +176,7 @@ export default function Home() {
       if (data) {
         await supabase
           .from("finetuningruns")
-          .update({ dataset: `public/${user?.id}` })
+          .update({ dataset: `public/${user?.id}/data.zip` })
           .eq("user_id", user?.id)
           .select();
         getOrInsertUserData(user);
