@@ -118,7 +118,7 @@ export default function Home() {
 
   async function clearUserData(user: any) {
     post(
-      `api/${user.id}`,
+      `api/${user.id}/clear`,
       { },
       (data: any) => setFinetuningData(data.output)
     );
