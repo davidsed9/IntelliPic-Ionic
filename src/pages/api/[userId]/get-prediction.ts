@@ -21,12 +21,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           console.log(value)
           return res.json(value);
         });
-
-  
-
-  // generate response
-  // ...
-
   // return response
   return res.json({ output: ""});
 };
