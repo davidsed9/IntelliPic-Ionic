@@ -70,22 +70,26 @@ export default function Home() {
   // Instance Type that defaults to "Man"
   const [instanceType, setInstanceType] = useState("Man");
   const [predictionId, setPredictionId] = useState("");
-  const [predictionCompleted, setPredictionCompleted] = useState<null|boolean>(null);
+  const [queueingPrediction, setQueueingPrediction] = useState(false);
   
+  // This useEffect to fetches the last prediction made by the current user
   useEffect(()=>{
     const sub = async() => {
       await supabase
         .from('predictions')
         .select('*')
-        // .eq('user_id', wuser?.id)
-        // .order('created_at', {ascending: false})
-        // .limit(1)
+        .eq('user_id', user?.id)
+        .order('created_at', {ascending: false})
+        .limit(1)
         .then((data) => {
-          console.log(data)
-          // const prediction = data.data?.[0].id;
-          // console.log(prediction)
-          // setPredictionId(prediction);
-        })
+          const predictionData = data.data?.[0];
+          if(!!predictionData){
+            setPredictionId(predictionData.id)
+            if(!(predictionData.status === "succeeded")){
+              setQueueingPrediction(true);
+            }
+          }
+        });
     }
     sub();
   },[])
@@ -109,7 +113,7 @@ export default function Home() {
 
   useInterval(() => getOrInsertUserData(user), 10000);
   useInterval(() => getModelStatus(user), 10000);
-  useInterval(() => handleGetPrediction(), 10000)
+  useInterval(() => handleGetPrediction(), 3000)
   
 
   async function clearUserData(user: any) {
@@ -124,7 +128,6 @@ export default function Home() {
   await fetch(`api/${user.id}`)
   .then((response) => response.json())
   .then((data) => {
-    console.log(data)
     setFinetuningData(data)
   });
 
@@ -199,7 +202,6 @@ export default function Home() {
   }
 
   async function handleCallModel() {
-    setPredictionCompleted(null);
     post(
       `api/${user?.id}/call-model`,
       {
@@ -207,26 +209,28 @@ export default function Home() {
         instance_prompt: instancePrompt,
       },
       (data: any) => {
-        // console.log(data.prediction_id);
         setPredictionId(data.prediction_id);
       }
     );
+    setQueueingPrediction(true);
   }
 
   async function handleGetPrediction(){
-    post(
-      `api/${user?.id}/get-prediction`,
-      {
-        prediction_id: predictionId
-      },
-      (data: any) => {
-        console.log(data.status)
-        if(data.status==="succeeded"){
-          setImageUrl(data.output[0])
-        } else {
+    if(queueingPrediction){
+      post(
+        `api/${user?.id}/get-prediction`,
+        {
+          prediction_id: predictionId
+        },
+        (data: any) => {
+          console.log(data)
+          if(data.status==="succeeded"){
+            setImageUrl(data.output)
+            setQueueingPrediction(false)
+          }
         }
-      }
-    )
+      )
+    }
   }
 
   const hasUploadedData = !!fineTuningData?.dataset;
