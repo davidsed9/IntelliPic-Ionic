@@ -42,6 +42,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
               input: {
                 prompt: prompt,
                 negative_prompt: process.env.REPLICATE_NEGATIVE_PROMPT,
+                disable_safety_check: true,
               },
               version: value.version,
             }
@@ -63,14 +64,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           });
         })
         
-
-  
-
-  // generate response
-  // ...
-
-  // return response
-  return res.json({ output: ""});
 };
 
 export default handler;

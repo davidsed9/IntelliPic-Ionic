@@ -122,6 +122,8 @@ export default function Home() {
       { },
       (data: any) => setFinetuningData(data.output)
     );
+    setPredictionId("");
+    setQueueingPrediction(false);
   }
 
   async function getOrInsertUserData(user: any) {
@@ -172,7 +174,7 @@ export default function Home() {
       }
       const { data } = await supabase.storage
         .from(FINETUNING_BUCKET)
-        .upload(`public/${user?.id}`, content);
+        .upload(`public/${user?.id}/data.zip`, content);
       if (data) {
         await supabase
           .from("finetuningruns")
