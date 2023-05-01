@@ -9,7 +9,7 @@ import styles from "./Home.module.css";
 import Header from "../components/Header";
 
 // const APP_ROOT = "https://intelli-pic.vercel.app/"; // Change this depending on where you want to be redirected after the email
-const APP_ROOT = "http://localhost:3000/"; // Change this depending on where you want to be redirected after the email
+const APP_ROOT = process.env.APP_ROOT; // Change this depending on where you want to be redirected after the email
 
 export default function Login() {
   const [email, setEmail] = useState("");
