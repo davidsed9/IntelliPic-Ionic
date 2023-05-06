@@ -35,7 +35,7 @@ export default function Login() {
   }
 
   return (
-    <>
+    <div>
       <Header showHeader={false} />
       <main className={classNames(styles.main, styles.loginpage)}>
         <input
@@ -58,6 +58,6 @@ export default function Login() {
         </button>
         <div className={styles.loginmessage}>{loginMessage.length > 0 && loginMessage}</div>
       </main>
-    </>
+    </div>
   );
 }

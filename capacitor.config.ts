@@ -3,7 +3,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'com.example.app',
   appName: 'IntelliPicIonic',
-  webDir: 'public',
+  webDir: '.next/server/pages/',
   server: {
     androidScheme: 'https'
   }

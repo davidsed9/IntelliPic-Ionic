@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Capacitor } from '@capacitor/core';
+
 
 import { useIsomorphicLayoutEffect, useTimeout } from "usehooks-ts";
 
@@ -244,10 +246,10 @@ export default function Home() {
   const fineTuningFailed = runStatus === "FAILED";
 
   return (
-    <>
+    <div>
       <Header />
       {ready && (
-        <>
+        <div>
           <main className={styles.main}>
             <div
               className={classNames(styles.step, {
@@ -261,7 +263,7 @@ export default function Home() {
                 </div>
 
                 {!hasUploadedData && (
-                  <>
+                  <div>
                     <input
                       type="file"
                       id="files"
@@ -287,7 +289,7 @@ export default function Home() {
                         Subir Imágenes
                       </button>
                     </label>
-                  </>
+                  </div>
                 )}
               </div>
             </div>
@@ -390,8 +392,8 @@ export default function Home() {
               </button>
             </div>
           </main>
-        </>
+        </div>
       )}
-    </>
+    </div>
   );
 }
